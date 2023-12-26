@@ -35,14 +35,6 @@ export default function MusicTable({ songs, playListId }: MusicTableProps) {
         <tr className="h-[16px]"></tr>
         {songs.map((song, i) => {
           const isCurrentSong = currentMusic.song?.id === song.id && currentMusic.playlist?.id === playListId;
-          console.log({
-            i,
-            currentSong: currentMusic.song?.id,
-            songId: song.id,
-            currentPlayList: currentMusic.playlist?.id,
-            playListId,
-            isCurrentSong
-          });
           return (
             <tr
               key={song.id}

@@ -16,7 +16,7 @@ export function Player() {
   }, [volume]);
 
   useEffect(() => {
-    const { song, playlist, songs } = currentMusic;
+    const { song, playlist } = currentMusic;
     if (song && audio !== null) {
       const src = `/music/${playlist?.id}/0${song.id}.mp3`;
       audio.src = src;
