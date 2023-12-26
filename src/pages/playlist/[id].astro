@@ -21,6 +21,7 @@ const artistsString = formatter.format(playlist.artists);
 <Layout title="Spotify Clone">
   <div
     id="playlist-container"
+    style={`background-color: ${playlist.color.accent}`}
     class="relative flex flex-col overflow-x-hidden bg-zinc-900"
     transition:name=`playlist ${id} box`
   >
