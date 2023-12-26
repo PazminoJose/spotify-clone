@@ -1,0 +1,49 @@
+---
+import type { Playlist } from "@/lib/data";
+import { formatArtists } from "@/lib/utils/formatArtists";
+import TrimmedText from "./TrimmedText.astro";
+import PlayButton from "./react/PlayButton";
+
+interface Props {
+  playlist: Playlist;
+}
+
+const { playlist } = Astro.props;
+const { id, cover, title, artists } = playlist;
+const artistsString = formatArtists(artists);
+---
+
+<article
+  class="group relative rounded-md bg-zinc-500/30 shadow-lg transition-all
+  duration-300 hover:bg-zinc-800 hover:shadow-xl peer-hover:bg-zinc-800"
+>
+  <div
+    class="peer absolute bottom-20 right-4 z-10 translate-y-4 opacity-0
+    transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+  >
+    <PlayButton id={id} client:load />
+  </div>
+  <a
+    href={`/playlist/${id}`}
+    class="playlist-item relative flex h-[15.5rem] w-44 flex-col items-start gap-2
+    overflow-hidden p-2 pb-6"
+    transition:name=`playlist ${id} box`
+  >
+    <picture class="aspect-square h-auto w-full flex-none">
+      <img
+        class="h-full w-full rounded-md object-cover"
+        src={cover}
+        alt={`Cover of ${title} by ${artistsString}`}
+        transition:name=`playlist ${id} image`
+      />
+    </picture>
+    <div class="flex flex-auto flex-col px-2">
+      <h4 class="text-sm text-white" transition:name=`playlist ${id} title`>
+        {title}
+      </h4>
+      <span class="text-sm text-gray-400" transition:name=`playlist ${id} artist text`>
+        <TrimmedText text={artistsString} />
+      </span>
+    </div>
+  </a>
+</article>
