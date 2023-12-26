@@ -1,0 +1,68 @@
+---
+import MusicsTable from "@/components/react/MusicTable";
+import PlayButton from "@/components/react/PlayButton";
+import Layout from "@/layouts/Layout.astro";
+import { allPlaylists, songs } from "@/lib/data";
+
+const { id } = Astro.params;
+const playlist = allPlaylists.find((playlist) => playlist.id === id);
+
+if (playlist === undefined) {
+  return Astro.redirect("/");
+}
+const playListSongs = songs.filter((song) => song.albumId === playlist.albumId);
+const formatter = new Intl.ListFormat("es", {
+  style: "long",
+  type: "conjunction"
+});
+const artistsString = formatter.format(playlist.artists);
+---
+
+<Layout title="Spotify Clone">
+  <div
+    id="playlist-container"
+    class="relative flex flex-col overflow-x-hidden bg-zinc-900"
+    transition:name=`playlist ${id} box`
+  >
+    <!-- <PageHeader/> -->
+    <header class="mt-10 flex flex-row gap-8 px-6">
+      <picture class="aspect-square h-52 w-52 flex-none">
+        <img
+          class="h-full w-full rounded-md object-cover shadow-lg"
+          src={playlist?.cover}
+          alt={`Cover of ${playlist?.title}`}
+          transition:name=`playlist ${playlist?.id} image`
+        />
+      </picture>
+
+      <div class="flex flex-col justify-between">
+        <h2 class="flex flex-1 items-end">Playlist</h2>
+        <div>
+          <h1 class="block text-5xl font-bold text-white" transition:name=`playlist ${id} title`>
+            {playlist?.title}
+            <!-- <span transition:name=`playlist ${playlist?.id} title`></span> -->
+          </h1>
+        </div>
+
+        <div class="flex flex-1 items-end">
+          <div class="text-sm font-normal text-gray-300">
+            <div transition:name=`playlist ${playlist?.id} artist`>
+              <span>{artistsString}</span>
+            </div>
+            <p class="mt-1">
+              <span class="text-white">{playListSongs.length} canciones</span>, 3 en espera
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="pl-6 pt-6">
+      <PlayButton id={id} iconClassName="w-5 h-5" client:load />
+    </div>
+    <div class="relative z-10 px-6 pt-10"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-zinc-900 via-zinc-800/80"></div>
+  </div>
+  <section class="p-6">
+    <MusicsTable songs={playListSongs} playListId={id ?? ""} client:only />
+  </section>
+</Layout>
