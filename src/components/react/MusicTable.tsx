@@ -27,7 +27,7 @@ export default function MusicTable({ songs, playListId }: MusicTableProps) {
           <th className="px-4 py-2 font-semibold">Titulo</th>
           <th className="px-4 py-2 font-semibold">Album</th>
           <th className="px-4 py-2 font-semibold">
-            <Time />
+            <Time className="ml-2.5" />
           </th>
         </tr>
       </thead>
@@ -38,9 +38,10 @@ export default function MusicTable({ songs, playListId }: MusicTableProps) {
           return (
             <tr
               key={song.id}
-              className={`${
+              className={cn(
+                "group text-base font-light text-gray-300 transition-colors duration-300 hover:bg-white/10",
                 isCurrentSong ? "bg-white/10" : "bg-inherit"
-              } group text-base font-light text-gray-300 transition-colors duration-300 hover:bg-white/10`}
+              )}
             >
               <td
                 className={cn(
