@@ -11,6 +11,19 @@ if (playlist === undefined) {
   return Astro.redirect("/");
 }
 const playListSongs = songs.filter((song) => song.albumId === playlist.albumId);
+const playListDuration = playListSongs.reduce(
+  (duration, current) => {
+    const [hours, minutes] = current.duration.split(":");
+    const totalMinutes = duration.minutes + parseInt(minutes);
+    const additionalHours = Math.floor(totalMinutes / 60);
+
+    return {
+      hours: duration.hours + parseInt(hours) + additionalHours,
+      minutes: totalMinutes % 60
+    };
+  },
+  { hours: 0, minutes: 0 }
+);
 const formatter = new Intl.ListFormat("es", {
   style: "long",
   type: "conjunction"
@@ -51,7 +64,8 @@ const artistsString = formatter.format(playlist.artists);
               <span>{artistsString}</span>
             </div>
             <p class="mt-1">
-              <span class="text-white">{playListSongs.length} canciones</span>, 3 en espera
+              <span class="text-white">{playListSongs.length} canciones</span>,
+              {playListDuration.hours}h {playListDuration.minutes} min aproximadamente
             </p>
           </div>
         </div>
